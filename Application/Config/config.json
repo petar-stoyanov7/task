@@ -1,0 +1,11 @@
+{
+    "db": {
+        "host": "localhost",
+        "db": "dbName",
+        "usr": "root",
+        "pwd": ""
+    },
+    "options": {
+        "partials": "../Application/Views/partials/"
+    }
+}

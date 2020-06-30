@@ -1,0 +1,5 @@
+#generated css
+/public/css
+#IDE artefacts
+.vscode/*
+.idea/*
