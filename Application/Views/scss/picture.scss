@@ -1,0 +1,24 @@
+.show-image {
+  max-height: 80vh;
+}
+
+div.row.picture-row {
+  margin: 10px;
+  padding: 10px;
+}
+
+.picture-comment {
+  margin-bottom: 10px;
+  h5 {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 0 0 0 2px;
+  }
+  span {
+    display: inline-block;
+    background-color: #bbd5db;
+    padding: 5px 10px;
+    border-radius: 0 7px 7px 7px;
+  }
+
+}

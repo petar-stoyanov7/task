@@ -1,5 +1,10 @@
 @import 'variables';
 
+.form-error {
+  border: 1px solid red;
+  box-shadow: 0 0 3px red;
+}
+
 .form-container {
 
   .error-message {
@@ -9,15 +14,19 @@
     font-size: 1.5em;
   }
 
-  #login-form {
+  .custom-form {
     margin: 20px;
 
     label {
       font-size: 1.3em;
     }
 
-    input {
+    input,select,textarea {
       margin-bottom: 10px;
+    }
+
+    textarea {
+      height: 20vh;
     }
   }
 }

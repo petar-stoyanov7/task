@@ -1,3 +1,6 @@
+<?php if (!empty($label)) : ?>
+    <label for="<?= $name; ?>"><?= $label; ?></label>
+<?php endif; ?>
 <textarea
 id="<?= $name; ?>"
 name="<?= $name; ?>"

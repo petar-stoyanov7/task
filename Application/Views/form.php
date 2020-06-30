@@ -1,7 +1,9 @@
 <div class="container main-container form-container">
     <div class="row">
         <div class="col-lg-12 col-md-12 col-xs-12 form-group">
-            <h3>Login:</h3>
+            <h3>
+                <?= $heading; ?>
+            </h3>
             <?php if (isset($errors)) : ?>
                 <div class="error-message">
                    <?php if (is_array($errors)) : ?>

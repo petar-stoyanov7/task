@@ -9,9 +9,12 @@
         <div class="col-lg-6 col-md-6 col-xs-6 mb-3 gallery-item">
             <h4>Image title</h4>
             <div class="image-container">
-                <img
-                    src="./uploads/0/01.jpg"
-                    alt="Another alt text">
+                <a href="/pictures/show/id/3">
+                    <img
+                        src="./uploads/0/01.jpg"
+                        alt="Another alt text"
+                    >
+                </a>
             </div>
             <p class="author">
                 <a href="/user/admin">admin</a>
@@ -125,6 +128,20 @@
                 <a href="/user/admin">admin</a>
             </p>
         </div>
-
+    </div>
+    <div class="row">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                </li>
+                <li class="page-item"><a class="page-link" href="/user/list/page/1">1</a></li>
+                <li class="page-item"><a class="page-link" href="/user/list/page/2">2</a></li>
+                <li class="page-item"><a class="page-link" href="/user/list/page/3">3</a></li>
+                <li class="page-item">
+                    <a class="page-link" href="/user/list/page/2">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>

@@ -4,7 +4,7 @@ namespace Application\Forms;
 
 use Core\Form\AbstractForm;
 
-class LoginForm extends AbstractForm
+class ContactsForm extends AbstractForm
 {
     public function __construct()
     {
@@ -14,8 +14,8 @@ class LoginForm extends AbstractForm
     public function init()
     {
         $this->setMethod('post');
-        $this->setName('login-form');
-        $this->setTarget('/user/login');
+        $this->setName('contacts-form');
+        $this->setTarget('/contacts/new');
         $this->setOptions(
             [
                 'classes' => [
@@ -27,23 +27,34 @@ class LoginForm extends AbstractForm
 
         $this->addElement(
             'text',
-            'login-username',
+            'name',
             [
                 'required' => true,
-                'placeholder' => 'Username',
-                'label' => 'Username',
+                'label' => 'Name:',
+                'placeholder' => 'your name',
                 'classes' => ['form-control'],
             ]
         );
 
         $this->addElement(
-            'password',
-            'login-password',
+            'email',
+            'email',
             [
                 'required' => true,
-                'placeholder' => 'Password',
-                'label' => 'Password',
+                'label' => 'Email',
+                'placeholder' => 'your e-mail address',
                 'classes' => ['form-control']
+            ]
+        );
+
+        $this->addElement(
+            'textarea',
+            'message',
+            [
+                'required' => true,
+                'label' => 'Message:',
+                'placeholder' => 'Your message',
+                'classes' => ['form-control'],
             ]
         );
 
@@ -52,13 +63,13 @@ class LoginForm extends AbstractForm
             'login-submit',
             [
                 'required' => false,
-                'label' => 'Login',
+                'label' => 'Send',
                 'classes' => [
                     'btn',
                     'btn-primary',
                 ]
             ]
         );
-    }
 
+    }
 }

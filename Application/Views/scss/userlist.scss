@@ -1,0 +1,12 @@
+@import 'variables';
+
+div.user-list {
+  table {
+    tr {
+      &:hover {
+        background-color: #74f1e7;
+        cursor: pointer;
+      }
+    }
+  }
+}

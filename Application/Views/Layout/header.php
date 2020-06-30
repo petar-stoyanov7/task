@@ -15,7 +15,7 @@
         <?php endforeach; ?>
     <?php endif; ?>
     <title>
-        <?= isset($title) ? $title : 'Галерия'; ?>
+        <?= isset($title) ? $title : 'Gallery'; ?>
     </title>
 </head>
 <body>
@@ -34,13 +34,18 @@
                 <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/pictures' ? ' active' : '' ?>">
                     <a class="nav-link" href="/pictures">Pictures</a>
                 </li>
-                <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/users' ? ' active' : '' ?>">
-                    <a class="nav-link" href="/users">Users</a>
+                <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/user/list' ? ' active' : '' ?>">
+                    <a class="nav-link" href="/user/list">Users</a>
                 </li>
+                <?php if (isset($_SESSION['user'])) : ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pictures/new">Upload</a>
+                    </li>
+                <?php endif; ?>
                 <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/contacts' ? ' active' : '' ?>">
                     <a class="nav-link" href="/contacts">Contacts</a>
                 </li>
-                <?php if (!isset($_SESSION['user']) && $_SESSION['user']['group'] === 'admin') : ?>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']['group'] === 'admin') : ?>
                     <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/admin' ? ' active' : '' ?>">
                         <a class="nav-link" href="/admin">Admin panel</a>
                     </li>
@@ -57,10 +62,10 @@
                 <?php else : ?>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link login-button" href="/account/login">Вход</a>
+                        <a class="nav-link login-button" href="/user/login">Вход</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link register-button" href="#">Регистрация</a>
+                        <a class="nav-link register-button" href="/user/register">Регистрация</a>
                     </li>
                 </ul>
                 <?php endif; ?>
@@ -72,3 +77,11 @@
 <div id="black-lvl-1" class="site-overlay"></div>
 <div id="black-lvl-2" class="site-overlay"></div>
 <div id="black-lvl-3" class="site-overlay"></div>
+<div id="loading-overlay" class="site-overlay"></div>
+<div id="loading-cover" class="site-overlay">
+    <div class="loading-container">
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+</div>
