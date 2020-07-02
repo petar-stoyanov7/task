@@ -5,6 +5,7 @@ namespace Application\Controllers;
 
 use Application\Forms\LoginForm;
 use Application\Forms\RegisterForm;
+use Application\Models\CommentModel;
 use Application\Models\PictureModel;
 use Application\Models\UserModel;
 use Core\View;
@@ -12,12 +13,14 @@ use Core\View;
 class User
 {
     private $userModel;
-    private $picturesModel;
+    private $pictureModel;
+    private $commentModel;
 
     public function __construct()
     {
         $this->userModel = new UserModel();
-        $this->picturesModel = new PictureModel();
+        $this->pictureModel = new PictureModel();
+        $this->commentModel = new CommentModel();
     }
 
     public function indexAction()
@@ -119,10 +122,12 @@ class User
         $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
         $allPages = $this->userModel->getNumberOfPages(10);
         $users = $this->userModel->getPaginatedData($page);
+        $url = '/user/list/';
         $viewParams = [
             'page'          => $page,
             'pages'         => $allPages,
             'users'         => $users,
+            'url'           => $url,
             'title'         => 'Users',
             'showPaginator' => true,
             'showActions'   => false,
@@ -145,7 +150,7 @@ class User
         $userForm = new RegisterForm($userId);
         $userForm->disableElement('username');
         $user = $this->userModel->getById($userId);
-        $userPics = $this->picturesModel->getUserPictures($userId);
+        $userPics = $this->pictureModel->getUserPictures($userId);
         $viewParams = [
             'form'      => $userForm,
             'user'      => $user,
@@ -189,10 +194,20 @@ class User
             header('location: /');
         } else {
             $userId = $params['id'];
+            //TODO better DB configuration might prevent this many actions
+            $userPictures = $this->pictureModel->getUserPictures($userId);
+            foreach ($userPictures as $picture) {
+                $this->commentModel->deletePictureComments($picture['id']);
+            }
+            $this->commentModel->deleteUserComments($userId);
+            $this->pictureModel->deleteUserPictures($userId);
             $this->userModel->deleteUser($userId);
             $userPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $userId;
             $this->_deleteDir($userPath);
-            $this->logoutAction();
+            if ($_SESSION['user']['id'] === $userId) {
+                $this->logoutAction();
+            }
+            header('location: /');
         }
     }
 

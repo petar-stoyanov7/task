@@ -58,10 +58,10 @@ class PictureForm extends AbstractForm
             'text',
             'picture_title',
             [
-                'required' => true,
-                'label' => 'Title',
-                'placeholder' => 'The title of the picture',
-                'classes' => ['form-control']
+                'required'      => true,
+                'label'         => 'Title',
+                'placeholder'   => 'The title of the picture',
+                'classes'       => ['form-control']
             ]
         );
 
@@ -69,8 +69,8 @@ class PictureForm extends AbstractForm
             'file',
             'picture-file',
             [
-                'required' => true,
-                'classes' => ['form-control']
+                'required'  => true,
+                'classes'   => ['form-control']
             ]
         );
 
@@ -78,8 +78,8 @@ class PictureForm extends AbstractForm
             'button',
             'picture-submit',
             [
-                'classes' => ['form-control'],
-                'label' => 'Send'
+                'classes'   => ['form-control'],
+                'label'     => 'Send'
             ]
         );
 

@@ -98,6 +98,12 @@ SQL;
         $this->execute($query, [$pictureId]);
     }
 
+    public function deleteUserPictures($userId)
+    {
+        $query = "DELETE FROM `pictures` WHERE `user_id` = ?";
+        $this->execute($query, [$userId]);
+    }
+
     public function getNumberOfPages($itemsPerPage)
     {
         $allPages = $this->getData('SELECT COUNT(`id`) as `count` FROM `pictures`');
@@ -110,7 +116,7 @@ SQL;
         $query = <<<SQL
             SELECT 
             `pictures`.*,
-            `users`.`username` as `author`
+            `users`.`username`
             FROM `pictures`
             LEFT JOIN `users` ON `pictures`.`user_id` = `users`.`id`
             ORDER BY `date_created` DESC 

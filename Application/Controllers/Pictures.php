@@ -132,6 +132,17 @@ class Pictures
         header('Location: /pictures/show');
     }
 
+    public function deleteCommentAction($params)
+    {
+        if (empty($params)) {
+            header('location: /');
+            return;
+        }
+        $commentId = $params['id'];
+        $this->commentModel->deleteById($commentId);
+        header('Location: /pictures/show');
+    }
+
     public function showAction($params)
     {
         if (empty($params) || empty($params['id'])) {

@@ -78,10 +78,10 @@ class RegisterForm extends AbstractForm
             'email',
             'email',
             [
-                'required' => true,
-                'placeholder' => 'Email address:',
-                'label' => 'Email address:',
-                'classes' => ['form-control'],
+                'required'      => true,
+                'placeholder'   => 'Email address:',
+                'label'         => 'Email address:',
+                'classes'       => ['form-control'],
             ]
         );
 
@@ -89,10 +89,10 @@ class RegisterForm extends AbstractForm
             'email',
             'email2',
             [
-                'required' => true,
-                'placeholder' => 'Repeat email address:',
-                'label' => 'Repeat email address:',
-                'classes' => ['form-control'],
+                'required'      => true,
+                'placeholder'   => 'Repeat email address:',
+                'label'         => 'Repeat email address:',
+                'classes'       => ['form-control'],
             ]
         );
 
@@ -100,10 +100,10 @@ class RegisterForm extends AbstractForm
             'text',
             'firstname',
             [
-                'required' => true,
-                'label' => 'First name',
-                'placeholder' => 'first name',
-                'classes' => ['form-control']
+                'required'      => true,
+                'label'         => 'First name',
+                'placeholder'   => 'first name',
+                'classes'       => ['form-control']
             ]
         );
 
@@ -111,10 +111,10 @@ class RegisterForm extends AbstractForm
             'text',
             'lastname',
             [
-                'required' => true,
-                'label' => 'Last name',
-                'placeholder' => 'last name',
-                'classes' => ['form-control']
+                'required'      => true,
+                'label'         => 'Last name',
+                'placeholder'   => 'last name',
+                'classes'       => ['form-control']
             ]
         );
 
@@ -122,9 +122,9 @@ class RegisterForm extends AbstractForm
             'button',
             'register-submit',
             [
-                'required' => false,
-                'label' => 'Register',
-                'classes' => [
+                'required'  => false,
+                'label'     => 'Register',
+                'classes'   => [
                     'btn',
                     'btn-primary',
                 ]

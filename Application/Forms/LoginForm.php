@@ -29,10 +29,10 @@ class LoginForm extends AbstractForm
             'text',
             'login-username',
             [
-                'required' => true,
-                'placeholder' => 'Username',
-                'label' => 'Username',
-                'classes' => ['form-control'],
+                'required'      => true,
+                'placeholder'   => 'Username',
+                'label'         => 'Username',
+                'classes'       => ['form-control'],
             ]
         );
 
@@ -40,10 +40,10 @@ class LoginForm extends AbstractForm
             'password',
             'login-password',
             [
-                'required' => true,
-                'placeholder' => 'Password',
-                'label' => 'Password',
-                'classes' => ['form-control']
+                'required'      => true,
+                'placeholder'   => 'Password',
+                'label'         => 'Password',
+                'classes'       => ['form-control']
             ]
         );
 
@@ -51,9 +51,9 @@ class LoginForm extends AbstractForm
             'button',
             'login-submit',
             [
-                'required' => false,
-                'label' => 'Login',
-                'classes' => [
+                'required'  => false,
+                'label'     => 'Login',
+                'classes'   => [
                     'btn',
                     'btn-primary',
                 ]

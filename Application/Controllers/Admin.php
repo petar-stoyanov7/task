@@ -41,48 +41,70 @@ class Admin
         $pictures = $this->pictureModel->getLastX(5);
         $comments = $this->commentModel->getLastX(5);
         $viewParams = [
-            'users' => $users,
-            'pictures' => $pictures,
-            'comments' => $comments,
-            'title' => 'Last five',
-            'CSS' => [
-                'userlist.css',
-                'admin.css'
-            ],
+            'users'     => $users,
+            'pictures'  => $pictures,
+            'comments'  => $comments,
+            'title'     => 'Last five',
+            'CSS'       => [
+                            'userlist.css',
+                            'admin.css'
+                        ],
         ];
         View::render('admin/last-five.php', $viewParams);
     }
 
-    public function usersAction()
+    public function usersAction($params)
     {
+        $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
+        $users = $this->userModel->getPaginatedData($page, 10);
+        $allPages = $this->userModel->getNumberOfPages(10);
+        $url = '/admin/users/';
         $viewParams = [
-            'title' => 'Administer users',
-            'showActions' => true,
+            'users'         => $users,
+            'page'          => $page,
+            'pages'         => $allPages,
+            'url'           => $url,
+            'title'         => 'Administer users',
+            'showActions'   => true,
             'showPaginator' => true,
-            'CSS' => [
-                'userlist.css',
-                'admin.css'
-            ]
+             'CSS'          => [
+                            'userlist.css',
+                            'admin.css'
+                        ]
         ];
         View::render('user/list.php', $viewParams);
     }
 
-    public function picturesAction()
+    public function picturesAction($params)
     {
+        $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
+        $pictures = $this->pictureModel->getPaginatedData($page);
+        $allPages = $this->pictureModel->getNumberOfPages(10);
         $viewParams = [
-            'title' => 'Administer users',
+            'page'          => $page,
+            'pages'         => $allPages,
+            'pictures'      => $pictures,
+            'url'           => '/admin/pictures/',
+            'title'         => 'Administer pictures',
             'showPaginator' => true,
-            'CSS' => ['admin.css'],
+            'CSS'           => ['admin.css'],
         ];
         View::render('admin/pictures.php', $viewParams);
     }
 
-    public function commentsAction()
+    public function commentsAction($params)
     {
+        $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
+        $comments = $this->commentModel->getPaginatedData($page);
+        $allPages = $this->commentModel->getNumberOfPages(10);
         $viewParams = [
-            'title' => 'Administer users',
+            'page'          => $page,
+            'pages'         => $allPages,
+            'comments'      => $comments,
+            'url'           => '/admin/comments/',
+            'title'         => 'Administer comments',
             'showPaginator' => true,
-            'CSS' => ['admin.css'],
+            'CSS'           => ['admin.css'],
         ];
         View::render('admin/comments.php', $viewParams);
     }

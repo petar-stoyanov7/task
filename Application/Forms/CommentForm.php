@@ -51,9 +51,9 @@ class CommentForm extends AbstractForm
             'textarea',
             'comment_body',
             [
-                'required' => true,
-                'classes' => ['form-control'],
-                'placeholder' => 'write a comment'
+                'required'      => true,
+                'classes'       => ['form-control'],
+                'placeholder'   => 'write a comment'
             ]
         );
 
@@ -61,8 +61,8 @@ class CommentForm extends AbstractForm
             'button',
             'submit',
             [
-                'classes' => ['form-control'],
-                'label' => 'Send'
+                'classes'   => ['form-control'],
+                'label'     => 'Send'
             ]
         );
 

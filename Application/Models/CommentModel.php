@@ -52,12 +52,41 @@ SQL;
         return $this->getData($query, [$pictureId]);
     }
 
+    public function getPaginatedData($page, $items = 10)
+    {
+        $query = <<<___SQL
+            SELECT 
+            `comments`.*,
+            `users`.`username`,
+            `pictures`.`path` as `picture_path`
+            FROM `comments`
+            LEFT JOIN `users` ON `comments`.`user_id` = `users`.`id`
+            LEFT JOIN `pictures` ON `comments`.`picture_id` = `pictures`.`id`
+            ORDER BY `date_created` DESC
+___SQL;
+        if ($page > 1) {
+            $offset = ($page - 1) * $items;
+            $query .= " LIMIT {$items} OFFSET {$offset}";
+            return $this->getData($query);
+        } else {
+            $query .= " LIMIT 10";
+            return $this->getData($query);
+        }
+    }
+
+    public function getNumberOfPages($itemsPerPage)
+    {
+        $allPages = $this->getData('SELECT COUNT(`id`) as `count` FROM `comments`');
+        $allPages = !empty($allPages) ? $allPages[0]['count'] : 0;
+        return (int)ceil($allPages/$itemsPerPage);
+    }
+
     public function getLastX($limit = 5)
     {
         $query = <<<SQL
             SELECT 
             `comments`.*,
-            `users`.`username` as `author`,
+            `users`.`username`,
             `pictures`.`path` as `picture_path`
             FROM `comments`
             LEFT JOIN `users` ON `comments`.`user_id` = `users`.`id`

@@ -41,10 +41,10 @@ class ContactsForm extends AbstractForm
             'text',
             'name',
             [
-                'required' => true,
-                'label' => 'Name:',
-                'placeholder' => 'your name',
-                'classes' => ['form-control'],
+                'required'      => true,
+                'label'         => 'Name:',
+                'placeholder'   => 'your name',
+                'classes'       => ['form-control'],
             ]
         );
 
@@ -52,10 +52,10 @@ class ContactsForm extends AbstractForm
             'email',
             'email',
             [
-                'required' => true,
-                'label' => 'Email',
-                'placeholder' => 'your e-mail address',
-                'classes' => ['form-control']
+                'required'      => true,
+                'label'         => 'Email',
+                'placeholder'   => 'your e-mail address',
+                'classes'       => ['form-control']
             ]
         );
 
@@ -63,10 +63,10 @@ class ContactsForm extends AbstractForm
             'textarea',
             'message',
             [
-                'required' => true,
-                'label' => 'Message:',
-                'placeholder' => 'Your message',
-                'classes' => ['form-control'],
+                'required'      => true,
+                'label'         => 'Message:',
+                'placeholder'   => 'Your message',
+                'classes'       => ['form-control'],
             ]
         );
 
@@ -74,9 +74,9 @@ class ContactsForm extends AbstractForm
             'button',
             'login-submit',
             [
-                'required' => false,
-                'label' => 'Send',
-                'classes' => [
+                'required'  => false,
+                'label'     => 'Send',
+                'classes'   => [
                     'btn',
                     'btn-primary',
                 ]
