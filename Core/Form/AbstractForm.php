@@ -10,6 +10,7 @@ abstract class AbstractForm
     private $formElements;
     private $fieldsets = [];
     private $groups = [];
+    private $isUpload;
 
     private $class;
 
@@ -127,6 +128,11 @@ abstract class AbstractForm
         if (array_key_exists($element, $this->formElements)) {
             $this->formElements[$element]['element']->setDisabled(true);
         }
+    }
+
+    public function setUpload(bool $isUpload)
+    {
+        $this->isUpload = $isUpload;
     }
 
 
@@ -314,6 +320,11 @@ abstract class AbstractForm
         }
 
         return $result;
+    }
+
+    public function getUpload()
+    {
+        return $this->isUpload;
     }
 
     ####################################################

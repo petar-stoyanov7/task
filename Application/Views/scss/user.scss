@@ -1,3 +1,67 @@
+.user-details-row {
+  margin-bottom: 10px;
+}
+
 .profile-picture {
-  max-height: 33vh;
+  max-height: 25vh;
+  img {
+    max-width: 120%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+.user-details {
+  span {
+    font-size: 2em;
+
+    &.user-heading {
+      display: inline-block;
+      margin-right: 15px;
+      font-weight: bold;
+    }
+    &.user-details {
+      display: inline-block;
+    }
+  }
+}
+
+.user-image-preview {
+  height: 25vh;
+  width: 24%;
+  overflow: hidden;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  position: relative;
+
+  &:hover {
+    .user-profile-set {
+      display: block;
+    }
+  }
+
+  .user-profile-set {
+    display: none;
+    position: absolute;
+    top: 1%;
+    right: 1%;
+  }
+
+  img {
+    max-width: 120%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
+#user-form-container {
+  display: none;
+  position: fixed;
+  top: 15%;
+  left: 35%;
+  width: 30%;
+  background-color: white;
+  box-shadow: 2px 2px 3px black;
+  border-radius: 3px;
+  padding: 10px;
 }

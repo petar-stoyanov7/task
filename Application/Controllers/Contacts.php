@@ -14,12 +14,13 @@ class Contacts
     }
     public function newAction()
     {
+        $userId = $_SESSION['user']['id'];
         $viewParams = [
             'title' => 'Contact us',
             'heading' => 'Contact us',
             'CSS' => ['form.css'],
             'JS' => ['contacts.js'],
-            'form' => new ContactsForm()
+            'form' => new ContactsForm($userId)
         ];
 
         View::render('form.php', $viewParams);

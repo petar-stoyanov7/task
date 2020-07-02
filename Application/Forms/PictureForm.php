@@ -4,21 +4,24 @@ namespace Application\Forms;
 
 use Core\Form\AbstractForm;
 
-class ContactsForm extends AbstractForm
+class PictureForm extends AbstractForm
 {
     private $userId;
+    private $pictureId;
 
-    public function __construct($userId = null)
+    public function __construct($userId = null, $pictureId = null)
     {
         $this->userId = $userId;
+        $this->pictureId = $pictureId;
+
+
         parent::__construct();
     }
 
     public function init()
     {
+        $this->setName('picture-form');
         $this->setMethod('post');
-        $this->setName('contacts-form');
-        $this->setTarget('/contacts/new');
         $this->setOptions(
             [
                 'classes' => [
@@ -27,61 +30,57 @@ class ContactsForm extends AbstractForm
                 ]
             ]
         );
+        $this->setUpload(true);
+
+        if (!empty($this->pictureId)) {
+            $this->addElement(
+                'hidden',
+                'picture_id',
+                [
+                    'required' => true
+                ],
+                $this->pictureId
+            );
+        }
 
         $this->addElement(
             'hidden',
             'user_id',
             [
-                'required' => false
+                'required' => true
             ],
             $this->userId
         );
 
         $this->addElement(
             'text',
-            'name',
+            'picture-title',
             [
                 'required' => true,
-                'label' => 'Name:',
-                'placeholder' => 'your name',
-                'classes' => ['form-control'],
-            ]
-        );
-
-        $this->addElement(
-            'email',
-            'email',
-            [
-                'required' => true,
-                'label' => 'Email',
-                'placeholder' => 'your e-mail address',
+                'label' => 'Title',
+                'placeholder' => 'The title of the picture',
                 'classes' => ['form-control']
             ]
         );
 
         $this->addElement(
-            'textarea',
-            'message',
+            'file',
+            'picture-file',
             [
                 'required' => true,
-                'label' => 'Message:',
-                'placeholder' => 'Your message',
-                'classes' => ['form-control'],
+                'classes' => ['form-control']
             ]
         );
 
         $this->addElement(
             'button',
-            'login-submit',
+            'submit',
             [
-                'required' => false,
-                'label' => 'Send',
-                'classes' => [
-                    'btn',
-                    'btn-primary',
-                ]
+                'classes' => ['form-control'],
+                'label' => 'Send'
             ]
         );
+
 
     }
 }

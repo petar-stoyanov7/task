@@ -19,6 +19,9 @@ $nonFieldsetElements = $form->getNonFieldsetElements();
     <?php if (!empty($form->getClass())) : ?>
         class="<?= $form->getClass() ?>"
     <?php endif; ?>
+    <?php if ($form->getUpload()) : ?>
+        enctype="multipart/form-data"
+    <?php endif; ?>
 >
 <?php if (!empty($fieldsetElements)) : ?>
     <?php foreach($fieldsetElements as $fieldsetName => $fieldSetGroup) : ?>

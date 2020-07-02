@@ -98,6 +98,28 @@ header {
   bottom: 0;
 }
 
+#confirmation-dialogue {
+  display: none;
+  position: fixed;
+  top: 30%;
+  left: 35%;
+  width: 30%;
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 3px black;
+
+  #confirmation-message {
+    display: inline-block;
+    font-size: 1.25em;
+    text-align: center;
+  }
+
+  #confirmation-buttons {
+    margin: 0 auto;
+  }
+}
+
 #black-lvl-1 {
   z-index: $z-index-min;
   background-color: rgba(0, 0, 0, 0.6);

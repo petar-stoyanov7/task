@@ -6,8 +6,14 @@ use Core\Form\AbstractForm;
 
 class CommentForm extends AbstractForm
 {
-    public function __construct()
+    private $userId;
+
+    public function __construct($userId = null)
     {
+        if (null !== $userId) {
+            $this->userId = $userId;
+        }
+
         parent::__construct();
     }
 
@@ -28,7 +34,8 @@ class CommentForm extends AbstractForm
             'user_id',
             [
                 'required' => true
-            ]
+            ],
+            $this->userId
         );
 
         $this->addElement(

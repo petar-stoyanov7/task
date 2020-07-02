@@ -47,7 +47,7 @@ class View
 
     public static function displayPartial($file, $arguments = [])
     {
-        $file =  "../Application/Views/partials/" . $file;
+        $file =  "../Application/Views/" . $file;
         $arguments['View'] = new View();
         if (is_readable($file)) {
             extract($arguments, EXTR_SKIP);

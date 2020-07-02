@@ -6,117 +6,148 @@ class DbSeed extends DbModelAbstract
     public function setupDb()
     {
         $sql = <<<___SQL
-            CREATE TABLE IF NOT EXISTS `Users` (
-              `ID` int(11) NOT NULL AUTO_INCREMENT,
-              `Username` varchar(50) DEFAULT NULL,
-              `Password` varchar(120) DEFAULT NULL,
-              `Group` varchar(50) DEFAULT NULL,
-              `Email` varchar(100) DEFAULT NULL,
-              `Fname` varchar(120) DEFAULT NULL,
-              `Lname` varchar(120) DEFAULT NULL,
-              `City` varchar(50) DEFAULT NULL,
-              `Sex` varchar(10) DEFAULT NULL,
-              `Notes` mediumtext,
-              PRIMARY KEY (`ID`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            CREATE TABLE `user_groups` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `name` VARCHAR(50) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              PRIMARY KEY (`id`))
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
 ___SQL;
         $this->execute($sql);
 
         $sql = <<<___SQL
-            CREATE TABLE `Expense_Types` (
-              `ID` int(11) NOT NULL AUTO_INCREMENT,
-              `Name` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci DEFAULT NULL,
-              PRIMARY KEY (`ID`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8;
-___SQL;
-        $this->execute($sql);
-
-        $sql = <<<___SQL
-            INSERT INTO `Expense_Types` 
-            VALUES 
-            (1,'Fuel'),
-            (2,'Insurance'),
-            (3,'Maintenance'),
-            (4,'Tax'),
-            (5,'Parts'),
-            (6,'Fine'),
-            (999,'Other');
+            INSERT INTO `user_groups` (`name`) VALUES ('users');
+            INSERT INTO `user_groups` (`name`) VALUES ('admins');
 ___SQL;
         $this->execute($sql);
 
 
-
         $sql = <<<___SQL
-            CREATE TABLE IF NOT EXISTS `Cars` (
-              `ID` int(11) NOT NULL AUTO_INCREMENT,
-              `UID` int(11) DEFAULT NULL COMMENT 'User ID',
-              `Brand` varchar(50) DEFAULT NULL,
-              `Model` varchar(50) DEFAULT NULL,
-              `Year` varchar(5) DEFAULT NULL,
-              `Color` varchar(50) DEFAULT NULL,
-              `Mileage` int(11) DEFAULT NULL,
-              `Fuel_ID` int(11) DEFAULT NULL,
-              `Fuel_ID2` int(11) DEFAULT NULL,
-              `Notes` mediumtext,
-              PRIMARY KEY (`ID`),
-              KEY `Fuel_ID` (`Fuel_ID`),
-              KEY `Fuel_ID2` (`Fuel_ID2`),
-              CONSTRAINT `Cars_ibfk_1` FOREIGN KEY (`Fuel_ID`) REFERENCES `Fuel_Types` (`ID`),
-              CONSTRAINT `Cars_ibfk_2` FOREIGN KEY (`Fuel_ID2`) REFERENCES `Fuel_Types` (`ID`)
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+            CREATE TABLE `users` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `group_id` INT NOT NULL DEFAULT 1,
+              `username` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `password` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `email` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `firstname` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `lastname` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `token` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NULL DEFAULT NULL,
+              `profile_picture` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NULL DEFAULT NULL,
+              `pictures_count` INT NULL DEFAULT 0,
+              `comments_count` INT NULL DEFAULT 0,
+              `date_created` DATETIME NOT NULL,
+              `date_modified` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              INDEX `grp_id_idx` (`group_id` ASC) VISIBLE,
+              CONSTRAINT `grp_id`
+                FOREIGN KEY (`group_id`)
+                REFERENCES `user_groups` (`id`)
+                ON DELETE RESTRICT
+                ON UPDATE RESTRICT)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
 ___SQL;
         $this->execute($sql);
 
         $sql = <<<___SQL
-            CREATE TABLE IF NOT EXISTS `Parts` (
-              `ID` int(11) NOT NULL AUTO_INCREMENT,
-              `UID` int(11) NOT NULL COMMENT 'User ID',
-              `CID` int(11) NOT NULL COMMENT 'Car ID',
-              `EID` int(11) NOT NULL COMMENT 'Expense ID',
-              `Mileage` int(11) NOT NULL,
-              `Date` date NOT NULL,
-              `Name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Name of the part',
-              PRIMARY KEY (`ID`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+            CREATE TABLE `pictures` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `user_id` INT NOT NULL,
+              `title` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `path` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `date_created` DATETIME NOT NULL,
+              `date_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              INDEX `usr_id_idx` (`user_id` ASC) VISIBLE,
+              CONSTRAINT `usr_id`
+                FOREIGN KEY (`user_id`)
+                REFERENCES `users` (`id`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;            
+___SQL;
+        $this->execute($sql);
+
+
+        $sql = <<<___SQL
+            CREATE TABLE `comments` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `user_id` INT NOT NULL,
+              `picture_id` INT NOT NULL,
+              `text` MEDIUMTEXT CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `date_created` DATETIME NOT NULL,
+              `date_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
+              CONSTRAINT `user_id`
+                FOREIGN KEY (`user_id`)
+                REFERENCES `users` (`id`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE,
+              CONSTRAINT `pic_id`
+                FOREIGN KEY (`id`)
+                REFERENCES `pictures` (`id`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+___SQL;
+        $this->execute($sql);
+
+
+
+        $sql = <<<___SQL
+            CREATE TABLE `messages` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `user_id` INT NULL DEFAULT NULL,
+              `name` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `email` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `message` MEDIUMTEXT CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+              PRIMARY KEY (`id`),
+              INDEX `msg_usr_id_idx` (`user_id` ASC) VISIBLE,
+              CONSTRAINT `msg_usr_id`
+                FOREIGN KEY (`user_id`)
+                REFERENCES `users` (`id`)
+                ON DELETE CASCADE
+                ON UPDATE CASCADE)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
+___SQL;
+        $this->execute($sql);
+
+
+        $sql = <<<___SQL
+            CREATE TABLE `tags` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `name` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              PRIMARY KEY (`id`))
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
 ___SQL;
         $this->execute($sql);
 
         $sql = <<<___SQL
-            CREATE TABLE IF NOT EXISTS `Fuel_Types` (
-              `ID` int(11) NOT NULL AUTO_INCREMENT,
-              `Name` varchar(50) DEFAULT NULL,
-              PRIMARY KEY (`ID`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
-___SQL;
-        $this->execute($sql);
-
-        $sql = <<<___SQL
-            INSERT INTO `Fuel_Types`
-             VALUES 
-             (1,'Gasoline'),
-             (2,'Diesel'),
-             (3,'LPG'),
-             (4,'Methane'),
-             (5,'Electricity'),
-             (6,'Other');             
-___SQL;
-        $this->execute($sql);
-
-        $sql = <<<___SQL
-            CREATE TABLE `Insurance_Types` (
-              `ID` int(11) NOT NULL AUTO_INCREMENT,
-              `Name` varchar(50) DEFAULT NULL,
-              PRIMARY KEY (`ID`)
-            ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
-___SQL;
-        $this->execute($sql);
-
-        $sql = <<<___SQL
-            INSERT INTO `Insurance_Types` 
-            VALUES 
-            (1,'GO'),
-            (2,'Kasko'),
-            (3,'Other');
+            CREATE TABLE `picture_tag` (
+              `id` INT NOT NULL AUTO_INCREMENT,
+              `picture_id` INT NOT NULL,
+              `tag_id` INT NOT NULL,
+              PRIMARY KEY (`id`),
+              INDEX `pt_pic_id_idx` (`picture_id` ASC) VISIBLE,
+              INDEX `pt_tag_id_idx` (`tag_id` ASC) VISIBLE,
+              CONSTRAINT `pt_pic_id`
+                FOREIGN KEY (`picture_id`)
+                REFERENCES `pictures` (`id`)
+                ON DELETE NO ACTION
+                ON UPDATE NO ACTION,
+              CONSTRAINT `pt_tag_id`
+                FOREIGN KEY (`tag_id`)
+                REFERENCES `tags` (`id`)
+                ON DELETE NO ACTION
+                ON UPDATE NO ACTION)
+            ENGINE = InnoDB
+            DEFAULT CHARACTER SET = utf8;
 ___SQL;
         $this->execute($sql);
 

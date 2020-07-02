@@ -31,7 +31,7 @@
                 <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/' ? ' active' : '' ?>">
                     <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
                 </li>
-                <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/pictures' ? ' active' : '' ?>">
+                <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/pictures/list' ? ' active' : '' ?>">
                     <a class="nav-link" href="/pictures">Pictures</a>
                 </li>
                 <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/user/list' ? ' active' : '' ?>">
@@ -39,16 +39,24 @@
                 </li>
                 <?php if (isset($_SESSION['user'])) : ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="/pictures/new">Upload</a>
+                        <a class="nav-link<?= $_SESSION['user']['pictures_count'] >= 10 ? ' disabled' : ''?>" href="/pictures/new">Upload</a>
                     </li>
                 <?php endif; ?>
                 <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/contacts' ? ' active' : '' ?>">
                     <a class="nav-link" href="/contacts">Contacts</a>
                 </li>
-                <?php if (isset($_SESSION['user']) && $_SESSION['user']['group'] === 'admin') : ?>
-                    <li class="nav-item<?= $_SERVER['REQUEST_URI'] === '/admin' ? ' active' : '' ?>">
-                        <a class="nav-link" href="/admin">Admin panel</a>
-                    </li>
+                <?php if (isset($_SESSION['user']) && $_SESSION['user']['group'] === 'admins') : ?>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/admin/last-five">Last 5</a>
+                        <a class="dropdown-item" href="/admin/pictures">Pictures</a>
+                        <a class="dropdown-item" href="/admin/users">Users</a>
+                        <a class="dropdown-item" href="/admin/comments">Comments</a>
+                    </div>
+                </li>
                 <?php endif; ?>
 
             </ul>
@@ -56,16 +64,19 @@
                 <?php if (isset($_SESSION['user'])) : ?>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="/profile">Профил</a>
+                        <a class="nav-link" href="/user/show/id/<?= $_SESSION['user']['id']?>">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/logout">Logout</a>
                     </li>
                 </ul>
                 <?php else : ?>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link login-button" href="/user/login">Вход</a>
+                        <a class="nav-link login-button" href="/user/login">Login</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link register-button" href="/user/register">Регистрация</a>
+                        <a class="nav-link register-button" href="/user/register">Register</a>
                     </li>
                 </ul>
                 <?php endif; ?>
@@ -83,5 +94,13 @@
         <div class="spinner-border text-light" role="status">
             <span class="sr-only">Loading...</span>
         </div>
+    </div>
+</div>
+
+<div id="confirmation-dialogue" class="cover-lvl-1">
+    <span id="confirmation-message">Are you sure?! Really?!@ Rawskjdhaksjd haksjdhkasjdh kajsd</span>
+    <div class="confirmation-buttons" align="center">
+        <a href="#" class="btn btn-danger btn-sm confirmation-dialogue-yes">yes</a>
+        <a href="#" class="btn btn-success btn-sm confirmation-dialogue-no">no</a>
     </div>
 </div>

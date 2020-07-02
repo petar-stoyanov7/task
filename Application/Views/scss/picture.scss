@@ -9,10 +9,23 @@ div.row.picture-row {
 
 .picture-comment {
   margin-bottom: 10px;
-  h5 {
-    font-size: 1em;
-    font-weight: bold;
-    margin: 0 0 0 2px;
+
+  &:hover {
+    box-shadow: 0 0 2px #039385;
+  }
+
+  .comment-heading {
+    h5 {
+      font-size: 1em;
+      font-weight: bold;
+      margin: 0 0 0 2px;
+    }
+
+    button {
+      padding: 0 4px 0 4px;
+      font-size: 0.7em;
+      border-radius: 50%;
+    }
   }
   span {
     display: inline-block;
@@ -21,4 +34,22 @@ div.row.picture-row {
     border-radius: 0 7px 7px 7px;
   }
 
+}
+
+#picture-edit-modal {
+  display: none;
+  position: fixed;  
+  width: 30%;
+  left: 30%;
+  top: 20%;
+  background-color: #fff;
+
+  padding: 10px;
+  box-shadow: 2px 2px 3px black;
+  border-radius: 5px;
+  form {
+    input {
+      margin-bottom: 10px;
+    }
+  }
 }

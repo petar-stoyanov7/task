@@ -6,8 +6,11 @@ use Core\Form\AbstractForm;
 
 class RegisterForm extends AbstractForm
 {
-    public function __construct()
+    private $userId;
+
+    public function __construct($userId = null)
     {
+        $this->userId = $userId;
         parent::__construct();
     }
 
@@ -25,9 +28,22 @@ class RegisterForm extends AbstractForm
             ]
         );
 
+        if (!empty($this->userId)) {
+
+            $this->addElement(
+                'hidden',
+                'user_id',
+                [
+                    'required' => true
+                ],
+                $this->userId
+            );
+
+        }
+
         $this->addElement(
             'text',
-            'register-username',
+            'username',
             [
                 'required' => true,
                 'placeholder' => 'Your username',
@@ -38,7 +54,7 @@ class RegisterForm extends AbstractForm
 
         $this->addElement(
             'password',
-            'register-password1',
+            'password',
             [
                 'required' => true,
                 'placeholder' => 'Password',
@@ -49,7 +65,7 @@ class RegisterForm extends AbstractForm
 
         $this->addElement(
             'password',
-            'register-password2',
+            'password2',
             [
                 'required' => true,
                 'placeholder' => 'Repeat password',
@@ -60,7 +76,7 @@ class RegisterForm extends AbstractForm
 
         $this->addElement(
             'email',
-            'email-address1',
+            'email',
             [
                 'required' => true,
                 'placeholder' => 'Email address:',
@@ -71,7 +87,7 @@ class RegisterForm extends AbstractForm
 
         $this->addElement(
             'email',
-            'email-address2',
+            'email2',
             [
                 'required' => true,
                 'placeholder' => 'Repeat email address:',
@@ -82,7 +98,7 @@ class RegisterForm extends AbstractForm
 
         $this->addElement(
             'text',
-            'first_name',
+            'firstname',
             [
                 'required' => true,
                 'label' => 'First name',
@@ -93,7 +109,7 @@ class RegisterForm extends AbstractForm
 
         $this->addElement(
             'text',
-            'last_name',
+            'lastname',
             [
                 'required' => true,
                 'label' => 'Last name',

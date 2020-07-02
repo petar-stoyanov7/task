@@ -1,0 +1,16 @@
+.admin-container {
+  margin-bottom: 20px;
+}
+
+.admin-image-thumbnail {
+  max-width: 45px;
+  max-height: 45px;
+  overflow: hidden;
+
+  img {
+    max-width: 120%;
+    height: auto;
+    object-fit: cover;
+  }
+}
+
