@@ -28,12 +28,12 @@
         <?php if($showNav) : ?>
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
-                <li class="page-item<?= $page === 1 ? ' disabled' : ''; ?>">
+                <li class="page-item<?= (int)$page === 1 ? ' disabled' : ''; ?>">
                     <a class="page-link" href="/pictures/list/page/<?= $page - 1; ?>">Previous</a>
                 </li>
                 <?php for ($i = 1; $i < $pages; $i++) : ?>
                     <?php if ($i < 3) : ?>
-                    <li class="page-item<?= $i === $page ? ' active' : ''?>">
+                    <li class="page-item<?= $i === (int)$page ? ' active' : ''?>">
                         <a class="page-link" href="/pictures/list/page/<?= $i; ?>">
                             <?= $i; ?>
                         </a>
@@ -41,7 +41,7 @@
                     <?php endif; ?>
                 <?php if ($pages > 4) : ?>
                     <?php if ($i > $pages-1) : ?>
-                        <li class="page-item<?= $i === $page ? ' active' : ''?>">
+                        <li class="page-item<?= $i === (int)$page ? ' active' : ''?>">
                             <a class="page-link" href="/pictures/list/page/<?= $i; ?>">
                                 <?= $i; ?>
                             </a>
@@ -49,7 +49,7 @@
                     <?php endif; ?>
                 <?php endif; ?>
                 <?php endfor; ?>
-                <li class="page-item<?= $page === $pages ? ' disabled' : ''; ?>">
+                <li class="page-item<?= (int)$page === $pages ? ' disabled' : ''; ?>">
                     <a class="page-link" href="/pictures/list/page/<?= $page + 1; ?>">Next</a>
                 </li>
             </ul>

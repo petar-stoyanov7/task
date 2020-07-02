@@ -7,12 +7,12 @@ use Core\Form\AbstractForm;
 class CommentForm extends AbstractForm
 {
     private $userId;
+    private $pictureId;
 
-    public function __construct($userId = null)
+    public function __construct($userId,$pictureId)
     {
-        if (null !== $userId) {
-            $this->userId = $userId;
-        }
+        $this->userId = $userId;
+        $this->pictureId = $pictureId;
 
         parent::__construct();
     }
@@ -31,7 +31,7 @@ class CommentForm extends AbstractForm
 
         $this->addElement(
             'hidden',
-            'user_id',
+            'comment_user_id',
             [
                 'required' => true
             ],
@@ -39,8 +39,17 @@ class CommentForm extends AbstractForm
         );
 
         $this->addElement(
+            'hidden',
+            'comment_picture_id',
+            [
+                'required' => true
+            ],
+            $this->pictureId
+        );
+
+        $this->addElement(
             'textarea',
-            'comment-body',
+            'comment_body',
             [
                 'required' => true,
                 'classes' => ['form-control'],

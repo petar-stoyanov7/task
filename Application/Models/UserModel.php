@@ -11,6 +11,39 @@ class UserModel extends DbModelAbstract
         return $this->getData("SELECT * FROM `users`");
     }
 
+    public function getPaginatedData($page, $items = 10)
+    {
+        $query = <<<___SQL
+            SELECT * FROM `users`
+            ORDER BY `date_created` DESC
+___SQL;
+        if ($page > 1) {
+            $offset = ($page - 1) * $items;
+            $query .= " LIMIT {$items} OFFSET {$offset}";
+            return $this->getData($query);
+        } else {
+            $query .= " LIMIT 10";
+            return $this->getData($query);
+        }
+    }
+
+    public function getLastX($limit = 5)
+    {
+        $query = <<<SQL
+            SELECT * FROM `users`
+            ORDER BY `date_created` DESC 
+            LIMIT %s;
+SQL;
+        $query = str_replace('%s', $limit, $query);
+        return $this->getData($query);
+    }
+
+    public function getNumberOfPages($itemsPerPage)
+    {
+        $allPages = $this->getFirst('SELECT COUNT(`id`) as `count` FROM `users`');
+        return (int)ceil($allPages['count']/$itemsPerPage);
+    }
+
     public function register($postValues)
     {
         $query = <<<___SQL
@@ -46,6 +79,34 @@ ___SQL;
     {
         $query = "UPDATE `users` SET `profile_picture` = ? WHERE `id` = ?";
         $this->execute($query, [$path, $userId]);
+    }
+
+    public function updateUser($userId, $data)
+    {
+        $query = <<<___SQL
+            UPDATE `users`
+            SET 
+            `firstname` = ?,
+            `lastname` = ?,
+            `email` = ?
+___SQL;
+        $values = [
+            $data['firstname'],
+            $data['lastname'],
+            $data['email']
+        ];
+        if (!empty($data['password'])) {
+            $query .= ", `password` = ?";
+            $values[] = password_hash($data['password'], PASSWORD_DEFAULT);
+        }
+        $query .= " WHERE `id` = ?";
+        $values[] = $userId;
+
+        return $this->execute($query, $values);
+    }
+
+    public function deleteUser($userId) {
+        $this->execute("DELETE FROM `users` WHERE `id` = ?",[$userId]);
     }
 
     public function login($username,$password)

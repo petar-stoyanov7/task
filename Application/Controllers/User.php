@@ -63,10 +63,33 @@ class User
 
     public function registerAction()
     {
+        $registerForm = new RegisterForm();
+        $viewParams = [
+            'title' => 'Register',
+            'form' => $registerForm,
+            'CSS' => 'form.css',
+            'JS' => 'register.js',
+            'heading' => 'Register'
+        ];
         if (!empty($_POST)) {
             $values = $_POST;
+            $users = $this->userModel->listUsers();
+            $isValid = true;
+            $errors = [];
+            foreach ($users as $user) {
+                if ($user['username'] === $values['username']) {
+                    $isValid = false;
+                    $errors[] = "Username [{$values['username']}] exists";
+                }
+                if ($user['email'] === $values['email']) {
+                    $isValid = false;
+                    $errors[] = "Email address [{$values['email']}] is already used";
+                }
+            }
             $validation = $this->_validateRegister($values);
-            if ($validation['isValid']) {
+            $isValid = $isValid && $validation['isValid'];
+            $errors = array_merge($errors, $validation['errors']);
+            if ($isValid) {
                 $directory = $_SERVER['DOCUMENT_ROOT'] . '/uploads/';
                 $newUserId = $this->userModel->register($values);
                 if ($newUserId) {
@@ -78,20 +101,14 @@ class User
                     header('location: /');
                 }
             } else {
-                $viewParams['errors'] = $validation['errors'];
+                $errors = array_unique($errors);
+                $viewParams['errors'] = $errors;
             }
         }
         if (isset($_SESSION['user'])) {
             header('location: /');
         }
-        $registerForm = new RegisterForm();
-        $viewParams = [
-            'title' => 'Register',
-            'form' => $registerForm,
-            'CSS' => 'form.css',
-            'JS' => 'register.js',
-            'heading' => 'Register'
-        ];
+
 
 
         View::render('form.php', $viewParams);
@@ -100,9 +117,11 @@ class User
     public function listAction($params)
     {
         $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
-
-        $users = $this->userModel->listUsers();
+        $allPages = $this->userModel->getNumberOfPages(10);
+        $users = $this->userModel->getPaginatedData($page);
         $viewParams = [
+            'page'          => $page,
+            'pages'         => $allPages,
             'users'         => $users,
             'title'         => 'Users',
             'showPaginator' => true,
@@ -133,7 +152,7 @@ class User
             'pictures'  => $userPics,
             'title'     => $user['firstname'].'\'s profile',
             'heading'   => $user['username'],
-            'CSS'       => 'user.css',
+            'CSS'       => ['user.css','form.css'],
             'JS'        => 'users.js'
 
         ];
@@ -152,6 +171,31 @@ class User
         }
     }
 
+    public function editProfileAction()
+    {
+        if (empty($_POST)) {
+            header('location: /');
+        } else {
+            $postData = $_POST;
+            $this->userModel->updateUser($postData['user_id'], $postData);
+            echo json_encode(['success' => 1]);
+            die();
+        }
+    }
+
+    public function deleteAction($params)
+    {
+        if (empty($params) || empty($params['id'])) {
+            header('location: /');
+        } else {
+            $userId = $params['id'];
+            $this->userModel->deleteUser($userId);
+            $userPath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $userId;
+            $this->_deleteDir($userPath);
+            $this->logoutAction();
+        }
+    }
+
     private function _validateRegister($values)
     {
         $errors = [];
@@ -161,8 +205,8 @@ class User
             $valid = false;
         }
         if (
-            empty($values['password1']) ||
-            ($values['password1'] !== $values['password2'])
+            empty($values['password']) ||
+            ($values['password'] !== $values['password2'])
         ) {
             $errors[] = 'Invalid password';
             $valid = false;
@@ -189,9 +233,17 @@ class User
         ];
     }
 
-    private function _getPublicPath()
-    {
-        $currentDir = __DIR__;
+    private function _deleteDir($path) {
+        $files = glob($path . '*', GLOB_MARK);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                self::_deleteDir($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($path);
     }
+
 
 }

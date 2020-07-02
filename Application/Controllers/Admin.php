@@ -4,10 +4,17 @@ namespace Application\Controllers;
 
 
 use Application\Forms\ContactsForm;
+use Application\Models\CommentModel;
+use Application\Models\PictureModel;
+use Application\Models\UserModel;
 use Core\View;
 
 class Admin
 {
+    private $userModel;
+    private $pictureModel;
+    private $commentModel;
+
     public function __construct()
     {
         if (!isset($_SESSION['user'])) {
@@ -17,6 +24,10 @@ class Admin
                 header('location: /');
             }
         }
+
+        $this->userModel = new UserModel();
+        $this->pictureModel = new PictureModel();
+        $this->commentModel = new CommentModel();
     }
 
     public function indexAction()
@@ -26,8 +37,13 @@ class Admin
 
     public function lastFiveAction()
     {
-        //
+        $users = $this->userModel->getLastX(5);
+        $pictures = $this->pictureModel->getLastX(5);
+        $comments = $this->commentModel->getLastX(5);
         $viewParams = [
+            'users' => $users,
+            'pictures' => $pictures,
+            'comments' => $comments,
             'title' => 'Last five',
             'CSS' => [
                 'userlist.css',

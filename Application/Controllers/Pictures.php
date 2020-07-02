@@ -5,6 +5,7 @@ namespace Application\Controllers;
 
 use Application\Forms\CommentForm;
 use Application\Forms\PictureForm;
+use Application\Models\CommentModel;
 use Application\Models\PictureModel;
 use Application\Models\UserModel;
 use Core\View;
@@ -13,11 +14,13 @@ class Pictures
 {
     private $pictureModel;
     private $userModel;
+    private $commentModel;
 
     public function __construct()
     {
         $this->pictureModel = new PictureModel();
         $this->userModel = new UserModel();
+        $this->commentModel = new CommentModel();
     }
 
     public function indexAction()
@@ -32,7 +35,7 @@ class Pictures
         $pictures = $this->pictureModel->getPaginatedData($page);
         $viewParams = [
             'page'      => $page,
-            'pages'  => $allPages,
+            'pages'     => $allPages,
             'pictures'  => $pictures,
             'title'     => 'Pictures',
             'heading'   => 'Gallery',
@@ -88,24 +91,118 @@ class Pictures
         }
     }
 
+    public function editPictureAction()
+    {
+        if (empty($_POST)) {
+            headeR('location: /');
+        } else {
+            $values = $_POST;
+            $currentPicture = $this->pictureModel->getById($values['picture_id']);
+            if (!empty($_FILES['picture-file']['name'])) {
+                $currentFile = $_SERVER['DOCUMENT_ROOT'] . $currentPicture['path'];
+                unlink($currentFile);
+                $file = $_FILES['picture-file'];
+                $newFile = md5($file['name']);
+                $newFile .= '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+                $userId = $currentPicture['user_id'];
+                $fullpath = $_SERVER['DOCUMENT_ROOT'] . '/uploads/' . $userId;
+                $fullpath .= $newFile;
+                /** $path represents the relative path, stored in DB,
+                 * $fullPath is the file's location on the filesystem */
+                $path = '/uploads/' . $userId;
+                if (move_uploaded_file($file['tmp_name'], $fullpath)) {
+                    $values['new_path'] = $path . $newFile;
+                }
+            }
+            $this->pictureModel->editPicture($values);
+            header('location: /pictures/show/id/'.$values['picture_id']);
+        }
+    }
+
+    public function deletePictureAction($params)
+    {
+        if (empty($params)) {
+            header('location: /');
+            return;
+        }
+        $picture = $this->pictureModel->getById($params['id']);
+        $this->commentModel->deletePictureComments($params['id']);
+        $this->pictureModel->deletePicture($params['id']);
+        $this->userModel->updatePictureCount($picture['user_id']);
+        header('Location: /pictures/show');
+    }
+
     public function showAction($params)
     {
         if (empty($params) || empty($params['id'])) {
             header('location: /');
         }
         $pictureId = $params['id'];
+        $userId = $_SESSION['user']['id'];
         $picture = $this->pictureModel->getById($pictureId);
-        $pictureEdit = new PictureForm();
-        $pictureEdit->getElementByName('picture-file')->setRequired(false);
+        $pictureEditForm = new PictureForm(null, $pictureId);
+        $pictureEditForm->setTarget('/pictures/edit-picture');
+        $commentForm = new CommentForm($userId,$pictureId);
+        $comments = $this->commentModel->getCommentsForPicture($pictureId);
+        $commentsLimit = $this->commentModel->getNumberOfPictureComments($pictureId);
+        if ($commentsLimit >= 10) {
+            $commentForm->disableElements(
+                ['comment_body', 'submit']
+            );
+        }
+        $pictureEditForm
+            ->getElementByName('picture-file')
+            ->setRequired(false);
         $viewParams = [
             'title'         => 'Image details',
-            'picture'      => $picture,
+            'picture'       => $picture,
+            'comments'      => $comments,
             'CSS'           => ['main.css', 'picture.css'],
             'JS'            => 'picture.js',
-            'editForm'      => $pictureEdit,
-            'commentForm'   => new CommentForm(),
+            'editForm'      => $pictureEditForm,
+            'commentForm'   => $commentForm,
         ];
 
         View::render('pictures/show.php', $viewParams);
+    }
+
+    public function addCommentAction()
+    {
+        if (empty($_POST)) {
+            header('location: /');
+        } else {
+            $data = $_POST;
+            $commentId = $this->commentModel->addComment($data);
+            if ($commentId) {
+                echo json_encode([
+                    'success'   => 1,
+                    'comment_id' => $commentId,
+                    'username'  => $_SESSION['user']['username']
+                ]);
+            } else {
+                echo json_encode(['success' => 0]);
+            }
+            die();
+        }
+    }
+
+    public function removeCommentAction()
+    {
+        if (empty($_POST)) {
+            header('location: /');
+        } else {
+            $comment = $this->commentModel->getById($_POST['comment_id']);
+            if (
+                $_SESSION['user']['group'] === 'admins' ||
+                $_SESSION['user']['id'] === $comment['user_id'] ||
+                $_SESSION['user']['id'] === $comment['picture_owner_id']
+            ) {
+                $this->commentModel->deleteById($comment['id']);
+                echo json_encode(['success' => 1]);
+            } else {
+                echo json_encode(['success' => 0]);
+            }
+        }
+        die();
     }
 }

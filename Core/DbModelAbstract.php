@@ -52,6 +52,15 @@ abstract class DbModelAbstract
         }
     }
 
+    public function getFirst($sql, $values = null) {
+        $result = $this->getData($sql, $values);
+        if (!empty($result) && !empty($result[0])) {
+            return $result[0];
+        } else {
+            return null;
+        }
+    }
+
     public function execute($sql, $values = null) {
         if (null !== $values) {
             try {

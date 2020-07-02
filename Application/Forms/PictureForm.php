@@ -43,18 +43,20 @@ class PictureForm extends AbstractForm
             );
         }
 
-        $this->addElement(
-            'hidden',
-            'user_id',
-            [
-                'required' => true
-            ],
-            $this->userId
-        );
+        if (!empty($this->userId)) {
+            $this->addElement(
+                'hidden',
+                'user_id',
+                [
+                    'required' => true
+                ],
+                $this->userId
+            );
+        }
 
         $this->addElement(
             'text',
-            'picture-title',
+            'picture_title',
             [
                 'required' => true,
                 'label' => 'Title',
@@ -74,7 +76,7 @@ class PictureForm extends AbstractForm
 
         $this->addElement(
             'button',
-            'submit',
+            'picture-submit',
             [
                 'classes' => ['form-control'],
                 'label' => 'Send'

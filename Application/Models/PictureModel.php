@@ -14,7 +14,7 @@ class PictureModel extends DbModelAbstract
 ___SQL;
         $values = [
             $postValues['user_id'],
-            $postValues['picture-title'],
+            $postValues['picture_title'],
             $postValues['file'],
             date("Y-m-d H:i:s", time()),
         ];
@@ -74,11 +74,50 @@ ___SQL;
         }
     }
 
+    public function editPicture($values)
+    {
+        $query = <<<SQL
+            UPDATE `pictures`
+            SET
+            `title` = ?
+SQL;
+        $data[] = $values['picture_title'];
+        if (!empty($values['new_path'])) {
+            $query .= ", `path` = ?";
+            $data[] = $values['new_path'];
+        }
+        $query .= " WHERE `id` = ?";
+        $data[] = $values['picture_id'];
+
+        $this->execute($query, $data);
+    }
+
+    public function deletePicture($pictureId)
+    {
+        $query = "DELETE FROM `pictures` WHERE `id` = ?";
+        $this->execute($query, [$pictureId]);
+    }
+
     public function getNumberOfPages($itemsPerPage)
     {
         $allPages = $this->getData('SELECT COUNT(`id`) as `count` FROM `pictures`');
         $allPages = !empty($allPages) ? $allPages[0]['count'] : 0;
         return (int)ceil($allPages/$itemsPerPage);
+    }
+
+    public function getLastX($limit = 5)
+    {
+        $query = <<<SQL
+            SELECT 
+            `pictures`.*,
+            `users`.`username` as `author`
+            FROM `pictures`
+            LEFT JOIN `users` ON `pictures`.`user_id` = `users`.`id`
+            ORDER BY `date_created` DESC 
+            LIMIT %s;
+SQL;
+        $query = str_replace('%s', $limit, $query);
+        return $this->getData($query);
     }
 
     public function getUserPictures($userId)

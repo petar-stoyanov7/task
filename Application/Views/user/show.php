@@ -7,7 +7,7 @@
                     <a href="#" class="btn btn-success btn-xs" onclick="showEditUser('<?= $user['id']; ?>')">
                         edit
                     </a>
-                    <a href="#" class="btn btn-danger btn-xs" onclick="deleteUser('<?= $user['id']; ?>')">
+                    <a href="/user/delete/id/<?= $user['id']; ?>" class="btn btn-danger btn-xs">
                         delete
                     </a>
                 <?php endif; ?>

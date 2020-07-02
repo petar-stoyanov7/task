@@ -2,17 +2,25 @@
 
     <div class="row picture-row">
         <div class="image-title d-flex flex-row justify-content-between w-100">
-            <h3 id="picture-display-title">Picture title</h3>
+            <h3 id="picture-display-title"><?= $picture['title']; ?></h3>
             <div class="image-controls">
                 <?php if (
                         isset($_SESSION['user']) &&
                         (
-                                ($_SESSION['user']['id']) === $picture['user_id'] ||
-                                $_SESSION['user']['group'] === 'admin'
+                                $_SESSION['user']['id'] === $picture['user_id'] ||
+                                $_SESSION['user']['group'] === 'admins'
                         )
                 ) : ?>
-                <a id="edit-image-button" href="#" class="btn btn-sm btn-success">edit</a>
-                <a id="delete-image-button" href="#" class="btn btn-sm btn-danger">delete</a>
+                <a id="edit-image-button" href="#" class="btn btn-sm btn-success">
+                    edit
+                </a>
+                <a
+                        id="delete-image-button"
+                        href="/pictures/delete-picture/id/<?= $picture['id']; ?>"
+                        class="btn btn-sm btn-danger"
+                >
+                    delete
+                </a>
                 <?php endif; ?>
             </div>
         </div>
@@ -46,16 +54,29 @@
 
         <div class="col-lg-8 col-md-8 col-xs-12 mb-3">
             <div id="comments-container">
-                <?php //TODO add real comments; ?>
-                <article id="3" class="picture-comment">
+                <?php foreach ($comments as $comment) : ?>
+                <article id="<?= $comment['id']; ?>" class="picture-comment">
                     <div class="d-flex flex-row justify-content-between w-100 comment-heading">
-                        <h5>Admin</h5>
-                        <button type="button" class="btn btn-danger btn-xs comment-delete" onclick="_deleteComment('3')">x</button>
+                        <h5><?= $comment['username']; ?></h5>
+                        <?php if (
+                                $_SESSION['user']['group'] === 'admins' ||
+                                $_SESSION['user']['id'] === $picture['user_id'] ||
+                                $_SESSION['user']['id'] === $comment['user_id']
+                        ) : ?>
+                        <button
+                                type="button"
+                                class="btn btn-danger btn-xs comment-delete"
+                                onclick="deleteComment('<?= $comment['id']; ?>')"
+                        >
+                            x
+                        </button>
+                        <?php endif; ?>
                     </div>
                     <span class="picture-comment">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Debitis doloremque eius excepturi exercitationem ipsa nam
+                        <?= $comment['text']; ?>
                     </span>
                 </article>
+                <?php endforeach; ?>
 
 
             </div>

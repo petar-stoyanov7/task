@@ -33,17 +33,46 @@
     <div class="row">
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled">
-                    <a class="page-link" href="#" tabindex="-1">Previous</a>
+                <li class="page-item<?= (int)$page === 1 ? ' disabled' : ''; ?>">
+                    <a class="page-link" href="/user/list/page/<?= $page - 1; ?>">Previous</a>
                 </li>
-                <li class="page-item"><a class="page-link" href="/user/list/page/1">1</a></li>
-                <li class="page-item"><a class="page-link" href="/user/list/page/2">2</a></li>
-                <li class="page-item"><a class="page-link" href="/user/list/page/3">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="/user/list/page/2">Next</a>
+                <?php for ($i = 1; $i < $pages; $i++) : ?>
+                    <?php if ($i < 3) : ?>
+                        <li class="page-item<?= $i === (int)$page ? ' active' : ''?>">
+                            <a class="page-link" href="/user/list/page/<?= $i; ?>">
+                                <?= $i; ?>
+                            </a>
+                        </li>
+                    <?php endif; ?>
+                    <?php if ($pages > 4) : ?>
+                        <?php if ($i > $pages-1) : ?>
+                            <li class="page-item<?= $i === (int)$page ? ' active' : ''?>">
+                                <a class="page-link" href="/user/list/page/<?= $i; ?>">
+                                    <?= $i; ?>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                <?php endfor; ?>
+                <li class="page-item<?= (int)$page === $pages ? ' disabled' : ''; ?>">
+                    <a class="page-link" href="/user/list/page/<?= $page + 1; ?>">Next</a>
                 </li>
             </ul>
         </nav>
+
+<!--        <nav aria-label="Page navigation">-->
+<!--            <ul class="pagination justify-content-center">-->
+<!--                <li class="page-item disabled">-->
+<!--                    <a class="page-link" href="#" tabindex="-1">Previous</a>-->
+<!--                </li>-->
+<!--                <li class="page-item"><a class="page-link" href="/user/list/page/1">1</a></li>-->
+<!--                <li class="page-item"><a class="page-link" href="/user/list/page/2">2</a></li>-->
+<!--                <li class="page-item"><a class="page-link" href="/user/list/page/3">3</a></li>-->
+<!--                <li class="page-item">-->
+<!--                    <a class="page-link" href="/user/list/page/2">Next</a>-->
+<!--                </li>-->
+<!--            </ul>-->
+<!--        </nav>-->
     </div>
     <?php endif; ?>
 </div>

@@ -9,21 +9,35 @@
             <th scope="col">Actions</th>
             </thead>
             <tbody>
-            <?php for ($i = 1; $i < 6; $i++) : ?>
-                <tr>
+            <?php foreach ($comments as $comment) : ?>
+                <tr comment-id="<?= $comment['id']?>">
                     <td>
                         <div class="admin-image-thumbnail">
-                            <img src="/uploads/0/0<?= $i; ?>.jpg" alt="">
+                            <a href="/pictures/show/id/<?= $comment['picture_id']; ?>">
+                                <img src="<?= $comment['picture_path']; ?>" alt="">
+                            </a>
                         </div>
                     </td>
-                    <td>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquid asperiores, assumenda consequatur doloremque eius esse facilis incidunt ipsum, iste maxime odio perspiciatis sapiente sequi. Cupiditate facere id labore nemo odit!</td>
-                    <td>admin</td>
-                    <td>21.06.2020</td>
                     <td>
-                        <a href="#" class="btn btn-danger btn-xs">delete</a>
+                        <?= $comment['text']; ?>
+                    </td>
+                    <td>
+                        <?= $comment['author']; ?>
+                    </td>
+                    <td>
+                        <?= $comment['date_created']; ?>
+                    </td>
+                    <td>
+                        <a
+                                href="#"
+                                class="btn btn-danger btn-xs"
+                                onclick="deleteComment('<?= $comment['id']; ?>')"
+                        >
+                            delete
+                        </a>
                     </td>
                 </tr>
-            <?php endfor; ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>

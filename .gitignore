@@ -1,7 +1,7 @@
 #generated css
 /public/css
 #custom content
-/uploads/*
+/public/uploads/
 #IDE artefacts
 .vscode/*
 .idea/*

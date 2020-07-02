@@ -9,21 +9,28 @@
             <th scope="col">Actions</th>
             </thead>
             <tbody>
-            <?php for ($i = 1; $i < 6; $i++) : ?>
-                <tr>
+            <?php foreach ($pictures as $picture) : ?>
+                <tr picture-id="<?= $picture['id']; ?>">
                     <td>
                         <div class="admin-image-thumbnail">
-                            <img src="/uploads/0/0<?= $i; ?>.jpg" alt="">
+                            <a href="/pictures/show/id/<?= $picture['id']; ?>">
+                                <img src="<?= $picture['path']; ?>" alt="">
+                            </a>
                         </div>
                     </td>
-                    <td>Title <?= $i; ?></td>
-                    <td>admin</td>
-                    <td>21.06.2020</td>
+                    <td><?= $picture['title']; ?></td>
+                    <td><?= $picture['author']; ?></td>
+                    <td><?= $picture['date_updated']; ?></td>
                     <td>
-                        <a href="#" class="btn btn-danger btn-xs">delete</a>
+                        <a href="#"
+                           class="btn btn-danger btn-xs"
+                           onclick="deletePicture('<?= $picture['id']; ?>')"
+                        >
+                            delete
+                        </a>
                     </td>
                 </tr>
-            <?php endfor; ?>
+            <?php endforeach; ?>
             </tbody>
         </table>
     </div>

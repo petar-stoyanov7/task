@@ -8,6 +8,7 @@
                     [
                         'showPaginator' => false,
                         'showActions'   => true,
+                        'users'         => $users
                     ]
             );
         ?>
@@ -18,7 +19,10 @@
         <?php
             $View::displayPartial(
                     'admin/pictures.php',
-                    ['showPaginator' => false]
+                    [
+                            'pictures'      => $pictures,
+                            'showPaginator' => false
+                    ]
             );
         ?>
     </div>
@@ -28,7 +32,10 @@
         <?php
             $View::displayPartial(
                     'admin/comments.php',
-                    ['showPaginator' => false]
+                    [
+                            'comments'      => $comments,
+                            'showPaginator' => false
+                    ]
             );
         ?>
     </div>

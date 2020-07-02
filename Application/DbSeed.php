@@ -73,25 +73,27 @@ ___SQL;
         $sql = <<<___SQL
             CREATE TABLE `comments` (
               `id` INT NOT NULL AUTO_INCREMENT,
-              `user_id` INT NOT NULL,
               `picture_id` INT NOT NULL,
-              `text` MEDIUMTEXT CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
+              `user_id` INT NOT NULL,
+              `text` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
               `date_created` DATETIME NOT NULL,
-              `date_updated` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_updated` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
               PRIMARY KEY (`id`),
-              INDEX `user_id_idx` (`user_id` ASC) VISIBLE,
-              CONSTRAINT `user_id`
+              INDEX `fk_cm_usr_id_idx` (`user_id` ASC) VISIBLE,
+              INDEX `fk_cm_pic_id_idx` (`picture_id` ASC) VISIBLE,
+              CONSTRAINT `fk_cm_usr_id`
                 FOREIGN KEY (`user_id`)
                 REFERENCES `users` (`id`)
-                ON DELETE CASCADE
-                ON UPDATE CASCADE,
-              CONSTRAINT `pic_id`
-                FOREIGN KEY (`id`)
+                ON DELETE NO ACTION
+                ON UPDATE NO ACTION,
+              CONSTRAINT `fk_cm_pic_id`
+                FOREIGN KEY (`picture_id`)
                 REFERENCES `pictures` (`id`)
-                ON DELETE CASCADE
-                ON UPDATE CASCADE)
+                ON DELETE NO ACTION
+                ON UPDATE NO ACTION)
             ENGINE = InnoDB
             DEFAULT CHARACTER SET = utf8;
+
 ___SQL;
         $this->execute($sql);
 

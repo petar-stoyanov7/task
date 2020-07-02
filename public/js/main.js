@@ -70,35 +70,6 @@ var _checkForm = function(formSelector)
     return isValid;
 }
 
-var _checkRegForm = function(pwd1,pwd2,email1,email2)
-{
-    var isValid = true;
-    if (pwd1.val() !== pwd2.val()) {
-        pwd1
-            .val('')
-            .addClass('form-error')
-            .attr('placeholder', 'passwords don\'t match');
-        pwd2
-            .val('')
-            .addClass('form-error')
-            .attr('placeholder', 'passwords don\'t match');
-        isValid = false;
-    }
-
-    if (email1.val() !== email2.val()) {
-        email1
-            .val('')
-            .addClass('form-error')
-            .attr('placeholder', 'email addresses don\'t match');
-        email2
-            .val('')
-            .addClass('form-error')
-            .attr('placeholder', 'email addresses don\'t match');
-        isValid = false;
-    }
-    return isValid;
-}
-
 var _showConfirmation = function()
 {
     $blacklvl1.show();
