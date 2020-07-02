@@ -40,7 +40,19 @@
         ?>
     </div>
 
-
+    <div class="row admin-container">
+        <h3>Last five messages</h3>
+        <?php
+        $View::displayPartial(
+            'admin/messages.php',
+            [
+                'showPaginator' => false,
+                'showActions'   => true,
+                'messages'         => $messages
+            ]
+        );
+        ?>
+    </div>
 
 
 </div>

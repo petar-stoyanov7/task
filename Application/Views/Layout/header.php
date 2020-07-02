@@ -55,6 +55,7 @@
                         <a class="dropdown-item" href="/admin/pictures">Pictures</a>
                         <a class="dropdown-item" href="/admin/users">Users</a>
                         <a class="dropdown-item" href="/admin/comments">Comments</a>
+                        <a class="dropdown-item" href="/admin/messages">Messages</a>
                     </div>
                 </li>
                 <?php endif; ?>

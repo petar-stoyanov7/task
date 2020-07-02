@@ -3,8 +3,8 @@
 namespace Application\Controllers;
 
 
-use Application\Forms\ContactsForm;
 use Application\Models\CommentModel;
+use Application\Models\ContactModel;
 use Application\Models\PictureModel;
 use Application\Models\UserModel;
 use Core\View;
@@ -14,6 +14,7 @@ class Admin
     private $userModel;
     private $pictureModel;
     private $commentModel;
+    private $contactModel;
 
     public function __construct()
     {
@@ -28,6 +29,7 @@ class Admin
         $this->userModel = new UserModel();
         $this->pictureModel = new PictureModel();
         $this->commentModel = new CommentModel();
+        $this->contactModel = new ContactModel();
     }
 
     public function indexAction()
@@ -40,10 +42,12 @@ class Admin
         $users = $this->userModel->getLastX(5);
         $pictures = $this->pictureModel->getLastX(5);
         $comments = $this->commentModel->getLastX(5);
+        $messages = $this->contactModel->getLastX(5);
         $viewParams = [
             'users'     => $users,
             'pictures'  => $pictures,
             'comments'  => $comments,
+            'messages'  => $messages,
             'title'     => 'Last five',
             'CSS'       => [
                             'userlist.css',
@@ -55,7 +59,7 @@ class Admin
 
     public function usersAction($params)
     {
-        $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
+        $page = $this->_getPage($params);
         $users = $this->userModel->getPaginatedData($page, 10);
         $allPages = $this->userModel->getNumberOfPages(10);
         $url = '/admin/users/';
@@ -77,7 +81,7 @@ class Admin
 
     public function picturesAction($params)
     {
-        $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
+        $page = $this->_getPage($params);
         $pictures = $this->pictureModel->getPaginatedData($page);
         $allPages = $this->pictureModel->getNumberOfPages(10);
         $viewParams = [
@@ -94,7 +98,7 @@ class Admin
 
     public function commentsAction($params)
     {
-        $page = isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
+        $page = $this->_getPage($params);
         $comments = $this->commentModel->getPaginatedData($page);
         $allPages = $this->commentModel->getNumberOfPages(10);
         $viewParams = [
@@ -107,5 +111,27 @@ class Admin
             'CSS'           => ['admin.css'],
         ];
         View::render('admin/comments.php', $viewParams);
+    }
+
+    public function messagesAction($params)
+    {
+        $page = $this->_getPage($params);
+        $messages = $this->contactModel->getPaginatedData($page);
+        $allPages = $this->contactModel->getNumberOfPages(10);
+        $viewParams = [
+            'page'          => $page,
+            'pages'         => $allPages,
+            'messages'      => $messages,
+            'url'           => '/admin/messages/',
+            'title'         => 'Administer messages',
+            'showPaginator' => true,
+            'CSS'           => ['admin.css'],
+        ];
+        View::render('admin/messages.php', $viewParams);
+    }
+
+    private function _getPage($params)
+    {
+        return isset($params['page']) && !empty($params['page']) ? $params['page'] : 1;
     }
 }

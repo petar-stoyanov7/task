@@ -28,13 +28,14 @@ class ContactsForm extends AbstractForm
             ]
         );
 
+        $userId = null === $this->userId ? 0 : $this->userId;
         $this->addElement(
             'hidden',
             'user_id',
             [
                 'required' => false
             ],
-            $this->userId
+            $userId
         );
 
         $this->addElement(

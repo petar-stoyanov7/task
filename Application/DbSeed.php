@@ -107,13 +107,7 @@ ___SQL;
               `email` VARCHAR(255) CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
               `message` MEDIUMTEXT CHARACTER SET 'utf8' COLLATE 'utf8_general_ci' NOT NULL,
               `date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
-              PRIMARY KEY (`id`),
-              INDEX `msg_usr_id_idx` (`user_id` ASC) VISIBLE,
-              CONSTRAINT `msg_usr_id`
-                FOREIGN KEY (`user_id`)
-                REFERENCES `users` (`id`)
-                ON DELETE CASCADE
-                ON UPDATE CASCADE)
+              PRIMARY KEY (`id`))             
             ENGINE = InnoDB
             DEFAULT CHARACTER SET = utf8;
 ___SQL;
